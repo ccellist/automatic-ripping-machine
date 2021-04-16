@@ -83,30 +83,3 @@ mkdir -p /mnt/dev/sr0
 echo -e "${RED}Adding fstab entry${NC}"
 echo -e "\n/dev/sr0  /mnt/dev/sr0  udf,iso9660  user,noauto,exec,utf8  0  0 \n" >> /etc/fstab
 
-#####run the ARM ui as a service
-echo -e "${RED}Installing ARM service${NC}"
-cat > /etc/systemd/system/armui.service <<- EOM
-[Unit]
-Description=Arm service
-## Added to force armui to wait for network
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-## Add your path to your logfiles if you want to enable logging
-## Remember to remove the # at the start of the line
-#StandardOutput=append:/PATH-TO-MY-LOGFILES/WebUI.log
-#StandardError=append:/PATH-TO-MY-LOGFILES/WebUI.log
-Restart=always
-RestartSec=3
-ExecStart=python3 /opt/arm/arm/runui.py
-
-[Install]
-WantedBy=multi-user.target
-EOM
-
-#reload the daemon and then start ui
-systemctl enable armui
-systemctl start armui
-systemctl daemon-reload
