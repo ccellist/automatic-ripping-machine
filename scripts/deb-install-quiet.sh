@@ -2,7 +2,8 @@
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
-export DEBIAN_FRONTEND=noninteractiveexport
+export DEBIAN_FRONTEND=noninteractive
+export GH_HOME="${GITHUB_HOME:-https://github.com/automatic-ripping-machine}"
 echo -e "${RED}Adding arm user${NC}"
 groupadd arm
 useradd -m arm -g arm -G cdrom
@@ -64,7 +65,8 @@ cd /opt
 mkdir arm
 chown arm:arm arm
 chmod 775 arm
-git clone https://github.com/automatic-ripping-machine/automatic-ripping-machine.git arm
+echo -e "${RED}Cloning from $GH_HOME/automatic-ripping-machine.git${NC}"
+git clone $GH_HOME/automatic-ripping-machine.git arm
 chown -R arm:arm arm
 cd arm
 pip3 install setuptools
